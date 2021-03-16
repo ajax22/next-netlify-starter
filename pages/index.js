@@ -18,6 +18,7 @@ export default function Home() {
           Get started by editing <code>pages/index.js</code>
         </p>
         <a href="https://twitter.com/ajinkyanarkar22" rel="me">Twitter</a>
+        <a href="https://www.instagram.com/ajax221990/" rel="me">Instagram</a>
       </main>
 
       <Footer />
