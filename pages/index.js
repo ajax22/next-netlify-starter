@@ -8,6 +8,8 @@ export default function Home() {
       <Head>
         <title>Next.js Starter!</title>
         <link rel="icon" href="/favicon.ico" />
+        <link rel="webmention" href="https://webmention.io/testwebmention.netlify.app/webmention" />
+        <link rel="pingback" href="https://webmention.io/testwebmention.netlify.app/xmlrpc" />
       </Head>
 
       <main>
