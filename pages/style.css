@@ -1,0 +1,25 @@
+.w3-container{
+    width: 668px;
+  }
+  .bg:hover {
+    animation: pulse 1.2s ease infinite;
+  }
+  @keyframes pulse {
+    0% {
+      transform: scale(1, 1);
+    }
+    50% {
+      opacity: 0.6;
+    }
+    100% {
+      transform: scale(1.2);
+      opacity: 0.1;
+    }
+  }
+
+.count {
+  padding: 10px;
+  border: 1px solid;
+  MARGIN: 5px;
+  border-radius: 5px;
+}
