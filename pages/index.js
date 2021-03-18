@@ -4,12 +4,12 @@ import Footer from '@components/Footer'
 import { useEffect, useState } from 'react'
 
 export default function Home() {
-  const [tweets, setTweets] = useState([])
+  const [mentions, setMentions] = useState([])
   const [count, setCounts] = useState({})
   useEffect(() => {
-    fetch("https://webmention.io/api/mentions.jf2?domain=testwebmention.netlify.app&token=cDfaWLs6IaSZcg9zWUq2dQ")
+    fetch("https://webmention.io/api/mentions?page=0&per-page=100&target=https://testwebmention.netlify.app/")
     .then(response => response.json())
-    .then(responseJson => setTweets(responseJson.children))
+    .then(responseJson => setMentions(responseJson.links))
 
     fetch("https://webmention.io/api/count.json?target=https://testwebmention.netlify.app/")
     .then(response => response.json())
@@ -19,10 +19,24 @@ export default function Home() {
       total: responseJson.count || 0,
     }))
   })
+
+  const getSource = (url) => {
+    return url.indexOf('twitter.com') >= 0 ? 'Twitter' : 'Others'
+  }
+
+  const getPostType = (type) => {
+    switch (type) {
+      case 'repost':
+        return 'ReTweet'
+      default:
+        return 'Post'
+    }
+  }
+
   return (
     <div className="container">
       <Head>
-        <title>Web Mention Demo</title>
+        <title>Web Mention</title>
         <link rel="icon" href="/favicon.ico" />
         <link rel="webmention" href="https://webmention.io/testwebmention.netlify.app/webmention" />
         <link rel="pingback" href="https://webmention.io/testwebmention.netlify.app/xmlrpc" />
@@ -30,7 +44,7 @@ export default function Home() {
       </Head>
 
       <main>
-        <Header title="Webmention App" />
+        <Header title="Webmention" />
         <h4>Count of:</h4>
         <div>
           <span class="count">Total: {count.total}</span>
@@ -38,14 +52,18 @@ export default function Home() {
           <span class="count">Likes: {count.likes}</span>
         </div>
         <div class="w3-container">
-  <h2>Consolidated Webmentions:</h2>
+  <h2>Discussion about this website:</h2>
   <ul class="w3-ul w3-card-4">
-          {tweets.map((tweet) => (
-    <li class="w3-bar">
-    <img src={tweet.author.photo} class="bg w3-bar-item w3-circle w3-hide-small" style={{width: '85px'}} />
+          {mentions.map((mention) => (
+    <li class="w3-panel w3-card">
+    <img src={mention.data.author.photo} class="bg w3-bar-item w3-circle w3-hide-small" style={{width: '85px'}} />
       <div class="w3-bar-item">
-        <span class="w3-large">{tweet.author.name}</span>
-        <div dangerouslySetInnerHTML= {{__html: tweet.content.html}}></div>
+        <span class="w3-large">{mention.data.author.name}</span>
+        <div>{mention.activity.sentence}</div>
+        <div>Post: <a href={mention.data.url}>link here</a></div>
+        <div>Type: {getPostType(mention.activity.type)}</div>
+        <div>Posted on: {new Date(mention.data.published).toDateString()}</div>
+        <div>Source: {getSource(mention.data.url)}</div>
       </div>
     </li>
             
